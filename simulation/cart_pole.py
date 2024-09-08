@@ -159,7 +159,7 @@ def infer():
 
 
 def train():
-    env = gym.make("InvertedPendulum-v4", render_mode="human")
+    env = gym.make("InvertedPendulum-v5", render_mode="human")
     wrapped_env = gym.wrappers.RecordEpisodeStatistics(
         env, 50
     )  # Records episode-reward

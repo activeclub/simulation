@@ -7,14 +7,13 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11"
-gymnasium = {extras = ["classic-control"], version = "^0.29.1"}
+gymnasium = {extras = ["mujoco"], version = "1.0.0a2"}
 mujoco = "3.2.2"
 torch = "2.4.1"
 numpy = "1.26.4"
 polars = "1.6.0"
 hvplot = "0.10.0"
 pyarrow = "17.0.0"
-stable-baselines3 = "^2.3.2"
 
 [build-system]
 requires = ["poetry-core"]
