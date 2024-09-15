@@ -7,6 +7,10 @@ from torch.distributions.normal import Normal
 import numpy as np
 import random
 import polars as pl
+import altair as alt
+import pickle
+
+alt.renderers.enable("browser")
 
 
 class PolicyNetwork(nn.Module):
@@ -169,10 +173,10 @@ def train():
     obs_space_dims = env.observation_space.shape[0]
     # Action-space of InvertedPendulum-v4 (1)
     action_space_dims = env.action_space.shape[0]
-    rewards_over_seeds = []
+    rewards_over_seeds: list[list] = []
 
-    # for seed in [1, 2, 3, 5, 8]:  # Fibonacci seeds
-    for seed in [1]:
+    # for seed in [1]:
+    for seed in [1, 2, 3, 5, 8]:  # Fibonacci seeds
         # set seed
         torch.manual_seed(seed)
         random.seed(seed)
@@ -211,16 +215,13 @@ def train():
 
         rewards_over_seeds.append(reward_over_episodes)
 
-    rewards_to_plot = [
-        [reward[0] for reward in rewards] for rewards in rewards_over_seeds
-    ]
+    with open('rewards_over_seeds.pickle', 'wb') as f:
+        pickle.dump(rewards_over_seeds, f)
+
+    rewards_to_plot = [rewards for rewards in rewards_over_seeds]
     df1 = pl.DataFrame(rewards_to_plot).melt()
     df1 = df1.rename({"variable": "episodes", "value": "reward"})
-    df1.plot.line(
-        x="episodes",
-        y="reward",
-        title="REINFORCE for InvertedPendulum-v4",
-    )
+    df1.plot.line(x="episodes", y="reward").show()
     # sns.set(style="darkgrid", context="talk", palette="rainbow")
     # sns.lineplot(x="episodes", y="reward", data=df1).set(
     #     title="REINFORCE for InvertedPendulum-v4"
