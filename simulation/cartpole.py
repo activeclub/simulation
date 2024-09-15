@@ -215,7 +215,7 @@ def train():
 
         rewards_over_seeds.append(reward_over_episodes)
 
-    with open('rewards_over_seeds.pickle', 'wb') as f:
+    with open("rewards_over_seeds.pickle", "wb") as f:
         pickle.dump(rewards_over_seeds, f)
 
     rewards_to_plot = [rewards for rewards in rewards_over_seeds]

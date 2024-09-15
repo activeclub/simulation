@@ -6,6 +6,13 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
+from gymnasium.envs.registration import register
+
+register(
+    id="CartPole-v99",
+    entry_point="simulation.envs.cartpole:CartPoleEnv",
+    max_episode_steps=200,
+)
 
 
 class ReplayBuffer:
@@ -96,7 +103,7 @@ class DQNAgent:
 if __name__ == "__main__":
     episodes = 300
     sync_interval = 20
-    env = gym.make("CartPole-v0", render_mode="human")
+    env = gym.make("CartPole-v99", render_mode="human")
     agent = DQNAgent()
     reward_history = []
 
@@ -107,11 +114,23 @@ if __name__ == "__main__":
 
         while not done:
             action = agent.get_action(state)
-            next_state, reward, done, _, info = env.step(action)
+            next_state, reward, terminated, truncated, info = env.step(action)
 
             agent.update(state, action, reward, next_state, done)
             state = next_state
             total_reward += reward
+
+            # End the episode when either truncated or terminated is true
+            #  - truncated: The episode duration reaches max number of timesteps
+            #  - terminated: Any of the state space values is no longer finite.
+            done = terminated or truncated
+
+            import pygame
+
+            text_font = pygame.font.SysFont("Arial", 36)
+            img = text_font.render(f"{episode}", True, (0, 0, 0))
+            info["screen"].blit(img, (100, 100))
+            pygame.display.flip()
 
         if episode % sync_interval == 0:
             agent.sync_qnet()
