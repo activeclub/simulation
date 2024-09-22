@@ -7,6 +7,19 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 from gymnasium.envs.registration import register
+from gymnasium.wrappers import RecordVideo
+from os import path
+from stable_baselines3 import DQN, PPO
+import polars as pl
+import altair as alt
+from stable_baselines3.common.env_util import make_vec_env
+from stable_baselines3.common.vec_env import VecEnv
+
+from simulation.envs.wrappers.display_info import DisplayInfo
+
+
+alt.renderers.enable("browser")
+
 
 register(
     id="CartPole-v99",
@@ -81,7 +94,7 @@ class DQNAgent:
 
         state, action, reward, next_state, done = self.replay_buffer.get_batch()
         qs = self.qnet(state)
-        q = qs[np.arange(len(action)), action]
+        q = qs[np.arange(self.batch_size), action]
 
         next_qs = self.qnet_target(next_state)
         next_q = next_qs.max(1)[0]
@@ -100,24 +113,24 @@ class DQNAgent:
         self.qnet_target.load_state_dict(self.qnet.state_dict())
 
 
-if __name__ == "__main__":
-    episodes = 300
+def naive(env):
+    episodes = 100_000
     sync_interval = 20
-    env = gym.make("CartPole-v99", render_mode="human")
+
     agent = DQNAgent()
     reward_history = []
 
     for episode in range(episodes):
-        state, _ = env.reset()
+        obs, _ = env.reset()
         done = False
         total_reward = 0
 
         while not done:
-            action = agent.get_action(state)
-            next_state, reward, terminated, truncated, info = env.step(action)
+            action = agent.get_action(obs)
+            next_obs, reward, terminated, truncated, info = env.step(action)
 
-            agent.update(state, action, reward, next_state, done)
-            state = next_state
+            agent.update(obs, action, reward, next_obs, done)
+            obs = next_obs
             total_reward += reward
 
             # End the episode when either truncated or terminated is true
@@ -125,16 +138,102 @@ if __name__ == "__main__":
             #  - terminated: Any of the state space values is no longer finite.
             done = terminated or truncated
 
-            import pygame
-
-            text_font = pygame.font.SysFont("Arial", 36)
-            img = text_font.render(f"{episode}", True, (0, 0, 0))
-            info["screen"].blit(img, (100, 100))
-            pygame.display.flip()
-
         if episode % sync_interval == 0:
             agent.sync_qnet()
 
         reward_history.append(total_reward)
         if episode % 10 == 0:
             print("episode :{}, total reward : {}".format(episode, total_reward))
+
+    df = pl.DataFrame(
+        {
+            "episode": list(range(episodes)),
+            "reward": reward_history,
+        }
+    )
+    df.plot.line(x="episode", y="reward").show()
+
+
+def sb3_dqn(env):
+    model = DQN("MlpPolicy", env, verbose=1)
+    model.learn(total_timesteps=100_000)
+    model.save("dqn_cartpole")
+
+    del model  # remove to demonstrate saving and loading
+
+    model = DQN.load("dqn_cartpole")
+
+    obs, _ = env.reset()
+    done = False
+    total_reward = 0
+
+    while not done:
+        action, _states = model.predict(obs, deterministic=True)
+        obs, reward, terminated, truncated, info = env.step(action)
+        total_reward += reward
+
+        done = terminated or truncated
+
+
+def sb3_ppo(vec_env: VecEnv):
+    model = PPO("MlpPolicy", vec_env, verbose=1)
+    model.learn(total_timesteps=50_000)
+    model.save("ppo_cartpole")
+
+    del model  # remove to demonstrate saving and loading
+
+    model = PPO.load("ppo_cartpole")
+
+    obs = vec_env.reset()
+    while True:
+        action, _states = model.predict(obs)
+        obs, rewards, dones, infos = vec_env.step(action)
+        vec_env.render("human")
+
+
+def _episode_trigger(episode_id: int) -> bool:
+    """The default episode trigger.
+
+    This function will trigger recordings at the episode indices 0, 1, 8, 27, ..., :math:`k^3`, ..., 729, 1000, 2000, 3000, ..., 10000, 200000, ...
+
+    Args:
+        episode_id: The episode number
+
+    Returns:
+        If to apply a video schedule number
+    """
+    if episode_id < 1000:
+        return int(round(episode_id ** (1.0 / 3))) ** 3 == episode_id
+    else:
+        return episode_id % (10 ** (len(str(episode_id)) - 1)) == 0
+
+
+if __name__ == "__main__":
+    # env = gym.make("CartPole-v99", render_mode="human")
+    # env = gym.make("CartPole-v0")
+    env = RecordVideo(
+        gym.make("CartPole-v0", render_mode="rgb_array"),
+        video_folder=f"{path.dirname(__file__)}/../videos",
+        episode_trigger=_episode_trigger,
+    )
+    # vec_env = gym.vector.make(
+    #     "CartPole-v0",
+    #     render_mode="rgb_array",
+    #     num_envs=4,
+    #     wrappers=lambda env: RecordVideo(
+    #         env, video_folder=f"{path.dirname(__file__)}/../videos"
+    #     ),
+    # )
+    vec_env = make_vec_env(
+        "CartPole-v0",
+        n_envs=4,
+        env_kwargs={"render_mode": "rgb_array"},
+        wrapper_class=lambda env: RecordVideo(
+            env=DisplayInfo(env=env),
+            video_folder=f"{path.dirname(__file__)}/../videos",
+            episode_trigger=_episode_trigger,
+        ),
+    )
+
+    # sb3_dqn(env)
+    sb3_ppo(vec_env)
