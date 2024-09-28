@@ -10,7 +10,7 @@ python = "^3.11"
 gymnasium = {extras = ["mujoco","classic-control","other"], version = "0.29.1"}
 mujoco = "3.2.3"
 torch = "2.4.1"
-numpy = "1.26.4"
+numpy = "2.1.1"
 polars = "1.8.2"
 pyarrow = "17.0.0"
 altair = "5.4.1"
