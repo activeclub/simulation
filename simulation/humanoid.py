@@ -1,4 +1,5 @@
 import time
+import os
 
 import mujoco
 import mujoco.viewer
@@ -139,15 +140,13 @@ humanoid_xml = """
     </actuator>
 </mujoco>
 """
-m = mujoco.MjModel.from_xml_string(humanoid_xml)
-# m = mujoco.MjModel.from_xml_path(f"{path.dirname(__file__)}/../data/robot.urdf")
+# m = mujoco.MjModel.from_xml_string(humanoid_xml)
+m = mujoco.MjModel.from_xml_path(f"{os.path.dirname(__file__)}/envs/assets/kxr_l2_humanoid.xml")
 # m = mujoco.MjModel.from_xml_path("/Users/nszknao/Documents/activeclub/simulation/data/robot.urdf")
 d = mujoco.MjData(m)
 
 with mujoco.viewer.launch_passive(m, d) as viewer:
-    # Close the viewer automatically after 30 wall-seconds.
-    start = time.time()
-    while viewer.is_running() and time.time() - start < 30:
+    while viewer.is_running():
         step_start = time.time()
 
         # mj_step can be replaced with code that also evaluates
