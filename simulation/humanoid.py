@@ -142,7 +142,7 @@ humanoid_xml = """
 """
 # m = mujoco.MjModel.from_xml_string(humanoid_xml)
 # m = mujoco.MjModel.from_xml_path(f"{os.path.dirname(__file__)}/envs/assets/kxr_l2_humanoid.xml")
-m = mujoco.MjModel.from_xml_path(f"{os.path.dirname(__file__)}/../data/body_nc.urdf")
+m = mujoco.MjModel.from_xml_path(f"{os.path.dirname(__file__)}/../data/body_c_forupdf.urdf")
 d = mujoco.MjData(m)
 
 with mujoco.viewer.launch_passive(m, d) as viewer:
