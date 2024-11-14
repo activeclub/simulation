@@ -7,9 +7,8 @@ permalink: https://perma.cc/C9ZM-652R
 import math
 from typing import Optional, Tuple, Union
 
-import numpy as np
-
 import gymnasium as gym
+import numpy as np
 from gymnasium import logger, spaces
 from gymnasium.envs.classic_control import utils
 from gymnasium.error import DependencyNotInstalled
@@ -241,7 +240,9 @@ class CartPoleEnv(gym.Env[np.ndarray, Union[int, np.ndarray]]):
         # Note that if you use custom reset bounds, it may lead to out-of-bound
         # state/observations.
         low, high = utils.maybe_parse_reset_bounds(
-            options, -0.05, 0.05  # default low
+            options,
+            -0.05,
+            0.05,  # default low
         )  # default high
         self.state = self.np_random.uniform(low=low, high=high, size=(4,))
         self.steps_beyond_terminated = None

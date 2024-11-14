@@ -1,22 +1,22 @@
-from collections import deque
 import random
-import numpy as np
+from collections import deque
+from os import path
+
+import altair as alt
 import gymnasium as gym
+import numpy as np
+import polars as pl
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 from gymnasium.envs.registration import register
 from gymnasium.wrappers import RecordVideo
-from os import path
 from stable_baselines3 import DQN, PPO
-import polars as pl
-import altair as alt
 from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.vec_env import VecEnv
 
 from simulation.envs.wrappers.display_info import DisplayInfo
-
 
 alt.renderers.enable("browser")
 

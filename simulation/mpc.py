@@ -1,7 +1,9 @@
 import os
-import mujoco
-from mujoco_mpc import agent as agent_lib
 import pathlib
+
+import mujoco
+
+from mujoco_mpc import agent as agent_lib
 
 model_path = (
     f"{os.path.dirname(__file__)}/../mujoco_mpc/build/mjpc/tasks/humanoid/walk/task.xml"

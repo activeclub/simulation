@@ -1,14 +1,15 @@
 # ref: https://gymnasium.farama.org/tutorials/training_agents/reinforce_invpend_gym_v26/
 
+import pickle
+import random
+
+import altair as alt
 import gymnasium as gym
+import numpy as np
+import polars as pl
 import torch
 import torch.nn as nn
 from torch.distributions.normal import Normal
-import numpy as np
-import random
-import polars as pl
-import altair as alt
-import pickle
 
 alt.renderers.enable("browser")
 

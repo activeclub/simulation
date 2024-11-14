@@ -10,9 +10,9 @@ from __future__ import annotations
 from typing import Any, SupportsFloat
 
 import gymnasium as gym
+import numpy as np
 from gymnasium.core import ActType, ObsType
 from gymnasium.error import DependencyNotInstalled
-import numpy as np
 
 
 class DisplayInfo(
