@@ -21,7 +21,6 @@ dependencies = [
 dev = [
     "mypy>=1.13.0",
     "ruff>=0.7.3",
-    "urdf2mjcf>=0.0.4",
 ]
 
 [tool.ruff]

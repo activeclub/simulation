@@ -1340,7 +1340,6 @@ dependencies = [
 dev = [
     { name = "mypy" },
     { name = "ruff" },
-    { name = "urdf2mjcf" },
 ]
 
 [package.metadata]
@@ -1361,7 +1360,6 @@ requires-dist = [
 dev = [
     { name = "mypy", specifier = ">=1.13.0" },
     { name = "ruff", specifier = ">=0.7.3" },
-    { name = "urdf2mjcf", specifier = ">=0.0.4" },
 ]
 
 [[package]]
@@ -1503,18 +1501,6 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/e1/34/943888654477a574a86a98e9896bae89c7aa15078ec29f490fef2f1e5384/tzdata-2024.2.tar.gz", hash = "sha256:7d85cc416e9382e69095b7bdf4afd9e3880418a2413feec7069d533d6b4e31cc", size = 193282 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/a6/ab/7e5f53c3b9d14972843a647d8d7a853969a58aecc7559cb3267302c94774/tzdata-2024.2-py2.py3-none-any.whl", hash = "sha256:a48093786cdcde33cad18c2555e8532f34422074448fbc874186f0abd79565cd", size = 346586 },
-]
-
-[[package]]
-name = "urdf2mjcf"
-version = "0.0.4"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "mujoco" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/0a/7a/0c78f1d1c212e419c10966e38f84730a8e66cb3664b58ae63e2e861a3b9c/urdf2mjcf-0.0.4.tar.gz", hash = "sha256:59c7acea0031269f9332f092512d9e275b5c562bb265c9908d25ebac9985160d", size = 10324 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/cd/8a/af9e336384ef7d04667e252859cdcbe952b62da43d8b2c99fd64af340909/urdf2mjcf-0.0.4-py3-none-any.whl", hash = "sha256:bdfc7a91777d873b0af116af4cbb5d54440d3e244511e48ab05aa271f481f725", size = 8906 },
 ]
 
 [[package]]
