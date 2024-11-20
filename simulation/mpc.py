@@ -7,11 +7,11 @@ from mujoco_mpc import agent as agent_lib
 
 mujoco_mpc_base_path = f"{os.path.dirname(__file__)}/../mujoco_mpc"
 
-# model_path = f"{mujoco_mpc_base_path}/build/mjpc/tasks/humanoid/walk/task.xml"
-# task_id = "Humanoid Walk"
+model_path = f"{mujoco_mpc_base_path}/build/mjpc/tasks/humanoid/walk/task.xml"
+task_id = "Humanoid Walk"
 
-model_path = f"{mujoco_mpc_base_path}/build/mjpc/tasks/cartpole/task.xml"
-task_id = "Cartpole"
+# model_path = f"{mujoco_mpc_base_path}/build/mjpc/tasks/cartpole/task.xml"
+# task_id = "Cartpole"
 
 model = mujoco.MjModel.from_xml_path(str(model_path))
 

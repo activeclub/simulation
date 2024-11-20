@@ -1,10 +1,15 @@
 # ref: https://gymnasium.farama.org/tutorials/training_agents/reinforce_invpend_gym_v26/
 
+import math
+import os
 import pickle
 import random
+import time
 
 import altair as alt
 import gymnasium as gym
+import mujoco
+import mujoco.viewer
 import numpy as np
 import polars as pl
 import torch
@@ -246,6 +251,47 @@ def simple_render():
     env.close()
 
 
+def pid():
+    model = mujoco.MjModel.from_xml_path(
+        f"{os.path.dirname(__file__)}/models/inverted_pendulum.xml"
+    )
+    data = mujoco.MjData(model)
+
+    # PIDゲイン
+    Kp = 1500
+    Ki = 2500
+    Kd = 60
+
+    # 制御用の変数
+    integral = 0.0
+    prev_error = 0.0
+
+    # シミュレーションの設定
+    time_step = model.opt.timestep
+
+    with mujoco.viewer.launch_passive(model, data) as viewer:
+        while viewer.is_running():
+            # 現在の振子の角度（ジョイント位置）を取得
+            pendulum_angle = data.qpos[1]
+
+            error = pendulum_angle / (math.pi / 2)
+            integral += error * time_step
+            derivative = (error - prev_error) / time_step
+            control_force = Kp * error + Ki * integral + Kd * derivative
+            prev_error = error
+
+            # 制御力を適用（制御入力をアクチュエータに設定）
+            data.ctrl[0] = control_force
+
+            # シミュレーションを1ステップ進める
+            mujoco.mj_step(model, data)
+
+            # GUIを更新
+            viewer.sync()
+
+            # スリープしてリアルタイムに近づける
+            time.sleep(time_step)
+
+
 if __name__ == "__main__":
-    train()
-    # simple_render()
+    pid()
