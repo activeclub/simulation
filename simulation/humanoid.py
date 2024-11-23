@@ -4,9 +4,9 @@ import time
 import mujoco
 import mujoco.viewer
 
-# m = mujoco.MjModel.from_xml_path(f"{os.path.dirname(__file__)}/models/humanoid.xml")
+m = mujoco.MjModel.from_xml_path(f"{os.path.dirname(__file__)}/models/humanoid.xml")
 # m = mujoco.MjModel.from_xml_path(f"{os.path.dirname(__file__)}/envs/assets/kxr_l2_humanoid.xml")
-m = mujoco.MjModel.from_xml_path(f"{os.path.dirname(__file__)}/../data/body_d_forurdf.urdf")
+# m = mujoco.MjModel.from_xml_path(f"{os.path.dirname(__file__)}/../data/body_d_forurdf.urdf")
 d = mujoco.MjData(m)
 
 with mujoco.viewer.launch_passive(m, d) as viewer:
