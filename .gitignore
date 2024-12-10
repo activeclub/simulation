@@ -1,6 +1,4 @@
 .DS_Store
-data/
-MUJOCO_LOG.TXT
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

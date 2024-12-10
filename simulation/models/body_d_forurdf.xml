@@ -1,5 +1,0 @@
-<mujoco model="Robot">
-  <compiler meshdir="../../data/body_d_forurdf_description/meshes" />
-  <include file="../../data/body_d_forurdf.urdf" />
-
-</mujoco>
