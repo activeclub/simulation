@@ -1,0 +1,20 @@
+{
+  "name": "multimodal-ai",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "remix vite:dev"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0",
+    "@remix-run/node": "^2.15.1",
+    "@remix-run/react": "^2.15.1",
+    "isbot": "^4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@remix-run/dev": "^2.15.1",
+    "@types/react": "^19.0.1",
+    "vite": "^6.0.3"
+  }
+}

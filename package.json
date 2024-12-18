@@ -1,0 +1,15 @@
+{
+  "name": "playground",
+  "version": "0.0.1",
+  "packageManager": "pnpm@9.15.0",
+  "scripts": {
+    "format-and-lint": "biome check .",
+    "format-and-lint:fix": "biome check . --write"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "@biomejs/biome": "^1.9.4"
+  }
+}
