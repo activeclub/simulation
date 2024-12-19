@@ -6,6 +6,5 @@
     }
   },
   "python.testing.unittestEnabled": false,
-  "python.testing.pytestEnabled": true,
-  "solidity.compileUsingRemoteVersion": "v0.8.26+commit.8a97fa7a"
+  "python.testing.pytestEnabled": true
 }
