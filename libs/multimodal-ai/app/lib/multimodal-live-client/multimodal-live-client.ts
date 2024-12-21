@@ -8,7 +8,7 @@ export class MultimodalLiveClient {
     this.url = `wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1alpha.GenerativeService.BidiGenerateContent?key=${apiKey}`;
   }
 
-  connect() {
+  async connect() {
     const ws = new WebSocket(this.url);
 
     ws.onerror = (event) => {
@@ -68,8 +68,9 @@ export class MultimodalLiveClient {
         };
 
         ws.onmessage = (event) => {
-          console.log(event.data);
+          console.log(event);
         };
+        resolve();
       };
     });
   }
